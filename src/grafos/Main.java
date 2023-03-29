@@ -112,12 +112,13 @@ public class Main {
 		 * System.out.println("");
 		 * System.out.println("Mostrar grafo transposto: 9*********");
 		 */
+	    System.out.println("Algoritmo Prim: 10");
 	    System.out.println("");
-	    System.out.println("Algoritmo Kruskal: 10");
+	    System.out.println("Algoritmo Kruskal: 11");
 	    System.out.println("");
-	    System.out.println("Busca em Profundidade: 11");
+	    System.out.println("Algoritmo Dijkstra: 12");
 	    System.out.println("");
-	    System.out.println("Busca pelo Custo Uniforme: 12");
+	    
 	    opcao = sc.next();
 	    
 	    
@@ -208,36 +209,27 @@ public class Main {
 	    	grafo.imprimeMatrizAdjacenciaTransposta(vertices);
 	    	System.out.println(" ");
 		   break;  
-	    case "10":
+	    case "11":
 	    	grafo.algoritmoKruskal(vertices);
 	    	break;
-	    case "11":
+	    case "12":
 	    	String orig;
 		    String dest;
 		    Scanner sc_orig = new Scanner(System.in);
-	   	 	System.out.println("Informe o vétice de origem da aresta:");
+	   	 	System.out.println("Informe o vétice para origem:");
 	   	 	orig = sc_orig.next();
 	   	 	Scanner sc_dest = new Scanner(System.in);
-	   	 	System.out.println("Informe o vértice de destino da aresta:");
+	   	 	System.out.println("Informe o vértice para destino:");
 	   	 	dest = sc_dest.next();
-	   	 	Vertice vOrigem = grafo.getVertice(orig);
-	   	  	Vertice vDestino = grafo.getVertice(dest);
-	    	System.out.println("Caminho percorrido pela busca em Profundidade:");
-	    	grafo.buscaEmProfundidade(vOrigem, vDestino);
+	    	System.out.println("Caminho percorrido pelo algoritmo Dijkstra:");
+	    	grafo.algoritmoDijkstra(orig, dest);
 	    	break;
-	    case "12":
-	    	String orig12;
-		    String dest12;
-		    Scanner sc_orig12 = new Scanner(System.in);
-	   	 	System.out.println("Informe o vétice de origem da aresta:");
-	   	 	orig12 = sc_orig12.next();
-	   	 	Scanner sc_dest12 = new Scanner(System.in);
-	   	 	System.out.println("Informe o vértice de destino da aresta:");
-	   	 	dest12 = sc_dest12.next();
-	   	 	Vertice vOrigem12 = grafo.getVertice(orig12);
-	   	  	Vertice vDestino12 = grafo.getVertice(dest12);
-	    	System.out.println("Caminho percorrido pela busca pelo caminho minimo:");
-	    	grafo.buscaPeloCustoUniforme(vOrigem12, vDestino12);
+	    case "10":
+	    	String vOrig;
+		    Scanner sc_vOrig = new Scanner(System.in);
+	   	 	System.out.println("Informe o vétice para origem:");
+	   	 	vOrig = sc_vOrig.next();
+	   		grafo.algoritmoPrim(grafo, vOrig);
 	    	break;
 	    default:
 	    	System.out.print("Opção inválida!");

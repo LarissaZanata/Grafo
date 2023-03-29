@@ -10,37 +10,33 @@ import java.util.Set;
 
 public class KruskalSet<TIPO> {
 	
-	Map<String, String> parent = new HashMap<>();
+	Map<String, String> vertices = new HashMap<>();
 	 
-    public void montaMap(Set<String> verticesUnicos)
-    {
+    public void montaMap(Set<String> verticesUnicos){
         // cria `n` conjuntos disjuntos (um para cada vértice)
-       
         verticesUnicos.stream().forEach(v -> {
-			parent.put(v, v);
+        	vertices.put(v, v);
 		});
     }
     
- // Encontra a raiz do conjunto ao qual pertence o elemento `k`
-    private String buscaK(String k)
-    {
-        // se `k` for root
-        if (parent.get(k) == k) {
-            return k;
+ // Encontra a raiz do conjunto ao qual pertence o vertice
+    private String buscaK(String vertice){
+        // se o vertice for a raiz
+        if (vertices.get(vertice) == vertice) {
+            return vertice;
         }
  
         //recorre para o pai até encontrarmos a raiz
-        return buscaK(parent.get(k));
+        return buscaK(vertices.get(vertice));
     }
     
     // Realiza união de dois subconjuntos
-    private void uniao(String a, String b)
-    {
-        // encontra a raiz dos conjuntos que os elementos `x` e `y` pertencem
-        String x = buscaK(a);
-        String y = buscaK(b);
+    private void uniao(String verticeOrigem, String verticeDestino){
+        // encontra a raiz dos conjuntos que o verticeOrigem e verticeDestino pertencem
+        String v_origem = buscaK(verticeOrigem);
+        String v_destino = buscaK(verticeDestino);
  
-        parent.put(x, y);
+        vertices.put(v_origem, v_destino);
     }
 
 	public List<Aresta<TIPO>> runKruskalAlgorithm(List<Aresta<TIPO>> arestas, Set<String> verticesUnicos){
@@ -56,7 +52,7 @@ public class KruskalSet<TIPO> {
         // ordena as arestas pelo peso, do menor ao maior
         Collections.sort(arestas, Comparator.comparingInt(a -> a.getPeso()));
  
-        // MST contém exatamente arestas `V-1`
+      
         while (arestasNaMST.size() != verticesUnicos.size() - 1)
         {
             // considera a próxima aresta com peso mínimo do gráfico
@@ -64,15 +60,15 @@ public class KruskalSet<TIPO> {
  
             // encontra a raiz dos conjuntos para os quais dois endpoints
             // os vértices da próxima aresta pertencem
-            String x = ks.buscaK(next_aresta.getInicio().getDadosString());
-            String y = ks.buscaK(next_aresta.getFim().getDadosString());
+            String verticeOrigem = ks.buscaK(next_aresta.getInicio().getDadosString());
+            String verticeDestino = ks.buscaK(next_aresta.getFim().getDadosString());
  
             // se ambos os endpoints tiverem pais diferentes, eles pertencem a
             // diferentes componentes conectados e podem ser incluídos no MST
-            if (x != y)
+            if (verticeOrigem != verticeDestino)
             {
             	arestasNaMST.add(next_aresta);
-                ks.uniao(x, y);
+                ks.uniao(verticeOrigem, verticeDestino);
             }
         }
  

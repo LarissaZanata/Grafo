@@ -3,12 +3,15 @@ package grafos;
 import java.awt.geom.Area;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Random;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.xml.transform.stax.StAXResult;
 
@@ -19,6 +22,22 @@ public class Grafo<TIPO> {
 	private ArrayList<Vertice<TIPO>> verticesRemovidos;
 	private ArrayList<Aresta<TIPO>> arestasRemovidas;
 	
+	public ArrayList<Vertice<TIPO>> getVertices() {
+		return vertices;
+	}
+
+	public void setVertices(ArrayList<Vertice<TIPO>> vertices) {
+		this.vertices = vertices;
+	}
+
+	public ArrayList<Aresta<TIPO>> getArestas() {
+		return arestas;
+	}
+
+	public void setArestas(ArrayList<Aresta<TIPO>> arestas) {
+		this.arestas = arestas;
+	}
+
 	public Grafo() {
 		this.vertices = new ArrayList<Vertice<TIPO>>();
 		this.arestas = new ArrayList<Aresta<TIPO>>();
@@ -455,10 +474,30 @@ public class Grafo<TIPO> {
 		arestasEntrada.sort(Comparator.comparing(Aresta::getPeso));
 	}
 	
+	public Vertice selecionarAleatorio() {
+		List<Vertice<TIPO>> list = new ArrayList<>(vertices);
+		Collections.shuffle(list);
+		return list.get(new Random().nextInt(vertices.size() - 1));
+	}
+	
+	public List<Aresta<TIPO>> getAdjacentes(Vertice<TIPO> origem) {
+		return arestas.stream().filter(aresta -> aresta.getInicio().getDadosString().equals(origem.getDadosString()))
+				.collect(Collectors.toList());
+	}
+	
 	
 	/*
 	 * Algoritmo Prim
 	 */
+	public void algoritmoPrim(Grafo grafo, String vertice) {
+		Prim prim = new Prim();
+		Set<Aresta<TIPO>> arvoreDeArestasMinimas =  prim.algoritmoPrim(grafo, vertice); 
+		System.out.println("ARESTAS DO CAMINHO MÍNIMO: ");
+		//imprimir árvore
+		arvoreDeArestasMinimas.forEach(a -> {
+			System.out.println(a.getInicio().getDado() + " - " + a.getFim().getDado() + "    peso: " + a.getPeso());
+		});
+	}
 	
 	/*
 	 * Algoritmo Kruskal
@@ -467,6 +506,8 @@ public class Grafo<TIPO> {
 		KruskalSet kruskalSet = new KruskalSet();
 		int n = verticesUnicos.size();
 		List<Aresta<TIPO>> retorno = kruskalSet.runKruskalAlgorithm(arestas, verticesUnicos);
+		
+		System.out.println("ARESTAS DO CAMINHO MÍNIMO: ");
 		
 		retorno.forEach(a -> {
 			System.out.println(a.getInicio().getDado() + " - " + a.getFim().getDado() + "    peso: " + a.getPeso());
@@ -477,6 +518,19 @@ public class Grafo<TIPO> {
 	/*
 	 * Algoritmo Dijkstra
 	 */
+	
+	public void algoritmoDijkstra(String verticeOrigem, String verticeDestino) {
+		Dijkstra dijkstra = new Dijkstra<TIPO>();
+		
+		Vertice<TIPO> vOrigem = getVerticeString(verticeOrigem);
+		Vertice<TIPO> vDestino = getVerticeString(verticeDestino);
+		
+		List<Vertice<TIPO>> verticesMenorCaminho = dijkstra.encontrarMenorCaminhoDijkstra(vertices, vOrigem, vDestino);
+		
+		verticesMenorCaminho.forEach(v -> {
+			System.out.println(v.getDado());
+		});
+	}
 	
 	/*
 	 * Algoritmo Bellman-Ford

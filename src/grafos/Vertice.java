@@ -7,7 +7,19 @@ public class Vertice<TIPO> {
 	private ArrayList<Aresta<TIPO>> arestasEntrada;
 	private ArrayList<Aresta<TIPO>> arestasSaida;
 	private int menorCusto;
+	private int distancia;
+	private boolean visitado = false;
+	private Vertice<TIPO> pai;
 	
+	public Vertice(TIPO dado) {
+		this.dado = dado;
+		this.arestasEntrada = new ArrayList<Aresta<TIPO>>();
+		this.arestasSaida = new ArrayList<Aresta<TIPO>>();
+	}
+	
+	public Vertice() {
+		
+	}
 	
 	public int getMenorCusto() {
 		return menorCusto;
@@ -16,11 +28,32 @@ public class Vertice<TIPO> {
 	public void setMenorCusto(int menorCusto) {
 		this.menorCusto = menorCusto;
 	}
+	
 
-	public Vertice(TIPO dado) {
-		this.dado = dado;
-		this.arestasEntrada = new ArrayList<Aresta<TIPO>>();
-		this.arestasSaida = new ArrayList<Aresta<TIPO>>();
+	public int getDistancia() {
+		return distancia;
+	}
+
+	public void setDistancia(int distancia) {
+		this.distancia = distancia;
+	}
+	
+
+	public boolean isVisitado() {
+		return visitado;
+	}
+
+	public void setVisitado(boolean visitado) {
+		this.visitado = visitado;
+	}
+	
+
+	public Vertice<TIPO> getPai() {
+		return pai;
+	}
+
+	public void setPai(Vertice<TIPO> pai) {
+		this.pai = pai;
 	}
 
 	public TIPO getDado() {
