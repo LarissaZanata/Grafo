@@ -13,7 +13,7 @@ public class KruskalSet<TIPO> {
 	Map<String, String> vertices = new HashMap<>();
 	 
     public void montaMap(Set<String> verticesUnicos){
-        // cria `n` conjuntos disjuntos (um para cada vértice)
+        // cria n conjuntos disjuntos (um para cada vértice)
         verticesUnicos.stream().forEach(v -> {
         	vertices.put(v, v);
 		});
@@ -39,7 +39,7 @@ public class KruskalSet<TIPO> {
         vertices.put(v_origem, v_destino);
     }
 
-	public List<Aresta<TIPO>> runKruskalAlgorithm(List<Aresta<TIPO>> arestas, Set<String> verticesUnicos){
+	public List<Aresta<TIPO>> kruskal(List<Aresta<TIPO>> arestas, Set<String> verticesUnicos){
         // armazena as arestas presentes na MST
         List<Aresta<TIPO>> arestasNaMST = new ArrayList<>();
  

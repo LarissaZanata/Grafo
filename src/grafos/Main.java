@@ -112,11 +112,19 @@ public class Main {
 		 * System.out.println("");
 		 * System.out.println("Mostrar grafo transposto: 9*********");
 		 */
+		/*
+		 * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Parte 2 do Trabalho: <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+		 */
+	    System.out.println("");
 	    System.out.println("Algoritmo Prim: 10");
 	    System.out.println("");
 	    System.out.println("Algoritmo Kruskal: 11");
 	    System.out.println("");
 	    System.out.println("Algoritmo Dijkstra: 12");
+	    System.out.println("");
+	    System.out.println("Algoritmo BellmanFord: 13");
+	    System.out.println("");
+	    System.out.println("Algoritmo Floyd-Warshal: 14");
 	    System.out.println("");
 	    
 	    opcao = sc.next();
@@ -209,6 +217,9 @@ public class Main {
 	    	grafo.imprimeMatrizAdjacenciaTransposta(vertices);
 	    	System.out.println(" ");
 		   break;  
+			/*
+			 * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Parte 2 do Trabalho: <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+			 */
 	    case "11":
 	    	grafo.algoritmoKruskal(vertices);
 	    	break;
@@ -230,6 +241,16 @@ public class Main {
 	   	 	System.out.println("Informe o vétice para origem:");
 	   	 	vOrig = sc_vOrig.next();
 	   		grafo.algoritmoPrim(grafo, vOrig);
+	    	break;
+	    case "13":
+	    	String v_orig;
+		    Scanner sc_v_orig = new Scanner(System.in);
+	   	 	System.out.println("Informe o vétice para origem:");
+	   	 	v_orig = sc_v_orig.next();
+	   	 	grafo.algoritmoBellmanFord(v_orig);
+	    	break;
+	    case "14":
+	    	grafo.algoritmoFloydWarshal();
 	    	break;
 	    default:
 	    	System.out.print("Opção inválida!");

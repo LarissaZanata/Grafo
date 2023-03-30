@@ -270,210 +270,6 @@ public class Grafo<TIPO> {
 		return matrizAdjacenciaTransposta;
 	}
 	
-	
-	/*
-	 * Busca em Largura
-	 */
-	public void buscaEmLargura(Vertice<TIPO> origem, Vertice<TIPO> destino) {
-		int peso = 0;
-		ArrayList<Vertice<TIPO>> visitados = new ArrayList<Vertice<TIPO>>();
-		ArrayList<Vertice<TIPO>> fila = new ArrayList<Vertice<TIPO>>();
-		List<String> caminhos = new ArrayList<String>();
-		List<Integer> pesos = new ArrayList<Integer>();
-		Vertice<TIPO> objetivo = destino;
-		Vertice<TIPO> atual = origem;
-		visitados.add(atual);
-		fila.add(atual);
-		
-		try {
-			caminhos.add((String)atual.getDado());
-		} catch (Exception e) {
-			System.out.println("Origem informada errada ou inexistente! Erro: " + e.getMessage());
-		}
-		
-		while(fila.size() > 0 ) {
-			boolean encontrouDestino = false;
-			Vertice<TIPO> visitado = fila.get(0);
-			
-			List<Vertice<TIPO>> cidades = new ArrayList<Vertice<TIPO>>();
-			try {
-				for(int i = 0; i < visitado.getArestasSaida().size(); i++) {
-					Vertice<TIPO> proximo = visitado.getArestasSaida().get(i).getFim();
-					if(!visitados.contains(proximo)) {
-						visitados.add(proximo);
-						fila.add(proximo);
-						cidades.add(proximo);
-					}
-				
-					if(proximo.getDado().equals(objetivo.getDado())) {
-						encontrouDestino = true;
-						break;
-					}
-				}
-			} catch (Exception e) {
-				System.out.println("Origem ou Destino informado errado ou inexistente! Erro: " + e.getMessage());
-			}
-			
-			for(int i = 0; i < cidades.size(); i++) {
-				for(int j = 0; j < cidades.get(i).getArestasEntrada().size(); j++) {
-					if(this.verifica(caminhos, (String) cidades.get(i).getArestasEntrada().get(j).getInicio().getDado()) != null){
-						caminhos.add(this.verifica(caminhos, (String) cidades.get(i).getArestasEntrada().get(j).getInicio().getDado())
-								+ "->" + (String)cidades.get(i).getDado());
-					}
-				}
-			}
-
-			fila.remove(0);
-			if(encontrouDestino) {
-				System.out.println("Execução da Busca em Largura:" + "\n");
-				System.out.println("Caminho: " + caminhos.get(caminhos.size()-1) + "\n");
-				System.out.println("Peso: " + this.calculaPeso(caminhos.get(caminhos.size()-1)) + "\n");
-				break;
-			}
-		}
-	}
-	
-	
-	private String verifica(List<String> caminhos, String cidade) {
-		boolean contain = false;
-		for(int i = 0; i < caminhos.size(); i++) {
-			if(caminhos.get(i).contains(cidade)) {
-				return caminhos.get(i);
-			}
-		}
-		return null;
-	}
-	
-	private int calculaPeso(String caminho) {
-		String[] cidades = caminho.split("->");
-		int pesoCalculado = 0;
-		
-		for(int i = 1; i < cidades.length; i++) {
-			String c = cidades[i];
-			List<Aresta<TIPO>> arestas = this.getVerticeString(c).getArestasEntrada();
-
-			for (Aresta<TIPO> aresta : arestas) {
-				if(aresta.getInicio().getDado().equals(cidades[i-1])) {
-					pesoCalculado = pesoCalculado + aresta.getPeso();
-				}
-			}
-		}
-		return pesoCalculado;
-	}
-
-	/*
-	 * Busca em Profundidade
-	 */
-	
-	public void buscaEmProfundidade(Vertice<TIPO> origem, Vertice<TIPO> destino) {
-		ArrayList<Vertice> visitados = new ArrayList<>();
-	    ArrayList<String> caminhos = new ArrayList<>();
-	    ArrayList<Integer> pesos = new ArrayList<>();
-	    visitados.add(origem);
-	    caminhos.add(origem.getDado().toString());
-	    int peso = 0;
-	    pesos.add(0);
-	    this.buscaEmProfundidade(origem, destino, visitados, caminhos, peso, pesos);
-	}
-	
-	private void buscaEmProfundidade(Vertice<TIPO> origem, Vertice<TIPO> destino, ArrayList<Vertice> visitados,  
-			ArrayList<String> caminhos, int peso, ArrayList<Integer> pesos) {
-		if(!visitados.contains(destino)) {
-			for (int i = 0; i < origem.getArestasSaida().size(); i++) {
-				if(visitados.contains(destino)) {
-					break;
-				}
-				if (!visitados.contains(origem.getArestasSaida().get(i).getFim())) {
-					visitados.add(origem.getArestasSaida().get(i).getFim());
-					peso = peso + origem.getArestasSaida().get(i).getPeso();
-					caminhos.add(caminhos.get(caminhos.size()-1) + "->" + origem.getArestasSaida().get(i).getFim().getDado());
-					pesos.add(peso);
-					buscaEmProfundidade(origem.getArestasSaida().get(i).getFim(), destino, visitados, caminhos, peso, pesos);
-				}
-			}
-		} else {
-			System.out.println("Busca em Profundidade:" + "\n");
-			System.out.println("Caminho:" + caminhos.get(caminhos.size()-1) + "\n");
-			System.out.println("Peso:" + pesos.get(pesos.size()-1) + "\n");
-		}	
-	}
-	
-	/*
-	 * Busca pelo Custo Uniforme
-	 * */
-	public void buscaPeloCustoUniforme(Vertice<TIPO> origem, Vertice<TIPO> destino) {
-		int peso = 0;
-		ArrayList<Vertice<TIPO>> visitados = new ArrayList<Vertice<TIPO>>();
-		ArrayList<Vertice<TIPO>> fila = new ArrayList<Vertice<TIPO>>();
-		List<String> caminhos = new ArrayList<String>();
-		List<Integer> pesos = new ArrayList<Integer>();
-		Vertice<TIPO> objetivo = destino;
-		Vertice<TIPO> atual = origem;
-		visitados.add(atual);
-		fila.add(atual);
-		
-		try {
-			caminhos.add((String)atual.getDado());
-		} catch (Exception e) {
-			System.out.println("Origem informada errada ou inexistente! Erro: " + e.getMessage());
-		}
-		
-		while(fila.size() > 0 ) {
-			boolean encontrouDestino = false;
-			Vertice<TIPO> visitado = fila.get(0);
-			
-			List<Vertice<TIPO>> cidades = new ArrayList<Vertice<TIPO>>();
-			try {
-				for(int i = 0; i < visitado.getArestasSaida().size(); i++) {
-					Vertice<TIPO> proximo = visitado.getArestasSaida().get(i).getFim();
-					if(!visitados.contains(proximo)) {
-						visitados.add(proximo);
-						fila.add(proximo);
-						cidades.add(proximo);
-					}
-				
-					if(proximo.getDado().equals(objetivo.getDado())) {
-						encontrouDestino = true;
-						break;
-					}
-				}
-			} catch (Exception e) {
-				System.out.println("Origem ou Destino informado errado ou inexistente! Erro: " + e.getMessage());
-			}
-			
-			for(int i = 0; i < cidades.size(); i++) {
-				for(int j = 0; j < cidades.get(i).getArestasEntrada().size(); j++) {
-					if(this.verifica(caminhos, (String) cidades.get(i).getArestasEntrada().get(j).getInicio().getDado()) != null){
-						caminhos.add(this.verifica(caminhos, (String) cidades.get(i).getArestasEntrada().get(j).getInicio().getDado())
-								+ "->" + (String)cidades.get(i).getDado());
-					}
-				}
-			}
-
-			fila.remove(0);
-			this.ordenaFronteiraPeloCusto(fila);;
-			if(encontrouDestino) {
-				System.out.println("Busca em Largura:" + "\n");
-				System.out.println("Caminho: " + caminhos.get(caminhos.size()-1) + "\n");
-				System.out.println("Peso: " + this.calculaPeso(caminhos.get(caminhos.size()-1)) + "\n");
-				break;
-			}
-		}
-	}
-	
-	private void ordenaFronteiraPeloCusto(ArrayList<Vertice<TIPO>> fila) {
-		fila.stream().forEach(f -> {
-			ArrayList<Aresta<TIPO>> arestasEntrada = f.getArestasEntrada();
-			this.ordenaArestasPorCusto(arestasEntrada);
-			f.setMenorCusto(arestasEntrada.get(0).getPeso());
-		});
-		fila.sort(Comparator.comparing(Vertice::getMenorCusto));
-	}
-	
-	private void ordenaArestasPorCusto(ArrayList<Aresta<TIPO>> arestasEntrada) {
-		arestasEntrada.sort(Comparator.comparing(Aresta::getPeso));
-	}
-	
 	public Vertice selecionarAleatorio() {
 		List<Vertice<TIPO>> list = new ArrayList<>(vertices);
 		Collections.shuffle(list);
@@ -487,12 +283,18 @@ public class Grafo<TIPO> {
 	
 	
 	/*
+	 * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Parte 2 do Trabalho: <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	 */
+	
+	
+	/*
 	 * Algoritmo Prim
 	 */
 	public void algoritmoPrim(Grafo grafo, String vertice) {
 		Prim prim = new Prim();
-		Set<Aresta<TIPO>> arvoreDeArestasMinimas =  prim.algoritmoPrim(grafo, vertice); 
+		Set<Aresta<TIPO>> arvoreDeArestasMinimas =  prim.prim(grafo, vertice); 
 		System.out.println("ARESTAS DO CAMINHO MÍNIMO: ");
+		System.out.println(" ");
 		//imprimir árvore
 		arvoreDeArestasMinimas.forEach(a -> {
 			System.out.println(a.getInicio().getDado() + " - " + a.getFim().getDado() + "    peso: " + a.getPeso());
@@ -504,10 +306,10 @@ public class Grafo<TIPO> {
 	 */
 	public void algoritmoKruskal(Set<String> verticesUnicos){
 		KruskalSet kruskalSet = new KruskalSet();
-		int n = verticesUnicos.size();
-		List<Aresta<TIPO>> retorno = kruskalSet.runKruskalAlgorithm(arestas, verticesUnicos);
+		List<Aresta<TIPO>> retorno = kruskalSet.kruskal(arestas, verticesUnicos);
 		
 		System.out.println("ARESTAS DO CAMINHO MÍNIMO: ");
+		System.out.println(" ");
 		
 		retorno.forEach(a -> {
 			System.out.println(a.getInicio().getDado() + " - " + a.getFim().getDado() + "    peso: " + a.getPeso());
@@ -525,10 +327,10 @@ public class Grafo<TIPO> {
 		Vertice<TIPO> vOrigem = getVerticeString(verticeOrigem);
 		Vertice<TIPO> vDestino = getVerticeString(verticeDestino);
 		
-		List<Vertice<TIPO>> verticesMenorCaminho = dijkstra.encontrarMenorCaminhoDijkstra(vertices, vOrigem, vDestino);
+		List<Vertice<TIPO>> retorno = dijkstra.dijkstra(vertices, vOrigem, vDestino);
 		
-		verticesMenorCaminho.forEach(v -> {
-			System.out.println(v.getDado());
+		retorno.forEach(v -> {
+			System.out.println(v.getDado() + " com distancia " + v.getDistancia());
 		});
 	}
 	
@@ -536,8 +338,23 @@ public class Grafo<TIPO> {
 	 * Algoritmo Bellman-Ford
 	 */
 	
+	public void algoritmoBellmanFord(String verticeOrigem) {
+		BellmanFord bellmanFord = new BellmanFord<TIPO>();
+		
+		Vertice<TIPO> vOrigem = getVerticeString(verticeOrigem);
+		
+		List<Vertice<TIPO>> retorno = bellmanFord.bellmanFord(arestas, vertices, vOrigem);
+		retorno.forEach(v -> {
+			System.out.println(v.getDado() + " com distancia " + v.getDistancia());
+		});
+	}
+	
 	/*
 	 * Algoritmo Floyd-Warshal
 	 */
+	public void algoritmoFloydWarshal() {
+		System.out.println("O algoritmo FloydWarsha ainda não foi implementado.");
+		System.out.println(" ");
+	}
 
 }

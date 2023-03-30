@@ -10,7 +10,7 @@ public class Prim<TIPO> {
 	private Set<Aresta<TIPO>>  arestasVisitadas = new HashSet<Aresta<TIPO>>();
 	private Set<Aresta<TIPO>>  arestasSelecionadas = new HashSet<Aresta<TIPO>>();
 	
-	public Set<Aresta<TIPO>> algoritmoPrim(Grafo grafo, String verticeOrigem) {
+	public Set<Aresta<TIPO>> prim(Grafo grafo, String verticeOrigem) {
 		
 		Vertice<TIPO> origem = grafo.getVerticeString(verticeOrigem);
 		//Vertice origem = grafo.selecionarAleatorio();

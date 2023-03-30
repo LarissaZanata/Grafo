@@ -2,7 +2,7 @@ package grafos;
 
 import java.util.ArrayList;
 
-public class Vertice<TIPO> {
+public class Vertice<TIPO> implements Comparable<Vertice<TIPO>>{
 	private TIPO dado;
 	private ArrayList<Aresta<TIPO>> arestasEntrada;
 	private ArrayList<Aresta<TIPO>> arestasSaida;
@@ -91,5 +91,15 @@ public class Vertice<TIPO> {
 
 	public void setArestasSaida(ArrayList<Aresta<TIPO>> arestasSaida) {
 		this.arestasSaida = arestasSaida;
+	}
+
+	@Override
+	public int compareTo(Vertice<TIPO> v) {
+		if (this.distancia > v.getDistancia()) { 
+			return -1; 
+		} if (this.distancia < v.getDistancia()) { 
+			return 1; 
+		} 
+			return 0; 
 	}
 }
